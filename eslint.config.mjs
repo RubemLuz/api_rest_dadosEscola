@@ -12,6 +12,8 @@ export default defineConfig([
     },
     rules:{
       "no-console": "off",
+      "class-methods-use-this": "off",
+      "import/frist":"off"
     },
   },
 ]);
