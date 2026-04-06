@@ -6,7 +6,7 @@ class Home
   {
     const newAluno = await Aluno.create(
       {
-        name: 'Rubem',
+        nome: 'Rubem',
         sobrenome: 'Luz',
         email: 'rubem.luz.santos@gmail.com',
         idade: 27,
