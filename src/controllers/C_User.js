@@ -7,7 +7,9 @@ class Home
     try
     {
       const newUser = await User.create(req.body);
-      return res.json(newUser);
+      const {id, nome, email} = newUser;
+
+      return res.json({id, nome, email});
     }
     catch(e)
     {
@@ -21,7 +23,9 @@ class Home
   {
     try
     {
-      const users = await User.findAll();
+      const users = await User.findAll( { attributes: ['id', 'nome', 'email'] });
+      console.log(req.userId);
+      console.log("ij");
       return res.json(users);
     }
     catch(e)
@@ -35,9 +39,10 @@ class Home
   {
     try
     {
-      const { id } = req.params;
       const usersId = await User.findByPk(id);
-      return res.json(usersId);
+
+      const { id, nome, email } = usersId;
+      return res.json({ id, nome, email });
     }
     catch(e)
     {
@@ -50,18 +55,14 @@ class Home
   {
     try
     {
-      const { id } = req.params;
-      if(!req.params.id) {return res.status(400).json(
-        { errors: ['ID não enviado!']}
-      );}
-
-      const usersId = await User.findByPk(id);
-      if(!usersId) {return res.status(400).json(
+      const user = await User.findByPk(req.userId);
+      if(!user) {return res.status(400).json(
         { errors: ['Usuario não existe!']}
       );}
 
-      const updateData = await usersId.update(req.body);
-      return res.json(updateData);
+      const updateData = await user.update(req.body);
+      const {id, nome, email} = updateData;
+      return res.json({id, nome, email});
     }
     catch(e)
     {
@@ -77,19 +78,14 @@ class Home
     console.log("PASSANDO O DELETE!");
     try
     {
-      const { id } = req.params;
-      if(!req.params.id) {return res.status(400).json(
-        { errors: ['ID não enviado!']}
-      );}
-
-      const usersId = await User.findByPk(id);
-      if(!usersId) {return res.status(400).json(
+      const id = await User.findByPk(req.userId);
+      if(!id) {return res.status(400).json(
         { errors: ['Usuario não existe!']}
       );}
 
       await User.destroy( {where: {id}} );
 
-      return res.json(usersId);
+      return res.json(id);
     }
     catch(e)
     {
